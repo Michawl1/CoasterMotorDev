@@ -1,10 +1,12 @@
 /*******************************************************************************
- * @file Main.ino
+ * @file CoasterDev.cpp
  * @author Michael Thompson
  * @brief This file outlines the main application of the coaster motor dev
  *        project
  * @details
 *******************************************************************************/
+
+#include <Arduino.h>
 #include <Adafruit_PWMServoDriver.h>
 
 Adafruit_PWMServoDriver g_motorDriver = Adafruit_PWMServoDriver();
