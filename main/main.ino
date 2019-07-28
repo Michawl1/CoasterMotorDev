@@ -9,11 +9,6 @@
 #include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>
 
-void setup();
-void loop();
-void interrupt1();
-void interrupt2();
-
 Adafruit_PWMServoDriver g_motorDriver = Adafruit_PWMServoDriver();
 uint8_t g_interrupt1 = 2;
 uint8_t g_interrupt2 = 3;
@@ -27,7 +22,9 @@ void setup()
   pinMode(g_interrupt1, INPUT_PULLUP);
   pinMode(g_interrupt2, INPUT_PULLUP);
 
+  //This is attached to uno R3 pin 2
   attachInterrupt(INT0, interrupt1, RISING);
+  //This is attached to uno R3 pin 3
   attachInterrupt(INT1, interrupt2, RISING);
 }
 
