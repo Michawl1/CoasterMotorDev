@@ -27,57 +27,35 @@ void setup()
   pinMode(g_interrupt1, INPUT_PULLUP);
   pinMode(g_interrupt2, INPUT_PULLUP);
 
-  attachInterrupt(digitalPinToInterrupt(g_interrupt1), interrupt1, RISING);
-  attachInterrupt(digitalPinToInterrupt(g_interrupt2), interrupt2, RISING);
+  attachInterrupt(INT0, interrupt1, RISING);
+  attachInterrupt(INT1, interrupt2, RISING);
 }
 
 void loop()
 {
 
-  switch(g_state)
-  {
-    case 0:
-      //This is the default state, we don't do anything here
-      break;
-    case 1:
-      //This is after the switch on the brakes is hit
-      noInterrupts();
-      delay(1000);
-      g_motorDriver.setPWM(0, 0, 50);
-      delay(1000);
-      g_motorDriver.setPWM(0, 0, 250);
-      interrupts();
-      break;
-    case 2:
-      //This is afer the switch in the station is hit
-      noInterrupts();
-      //station gates
-      g_motorDriver.setPWM(1, 0, 50);
-      delay(1000);
-      g_motorDriver.setPWM(1, 0, 250);
-      delay(1000);
+}
 
-      //deploy motor
-      g_motorDriver.setPWM(2, 0, 50);
-      delay(1000);
-      g_motorDriver.setPWM(2, 0, 250);
-      delay(1000);
-
-      interrupts();    
-  }
+//Switch tied to brakes
+void interrupt1()
+{
+  delay(1000);
   g_motorDriver.setPWM(0, 0, 50);
   delay(1000);
   g_motorDriver.setPWM(0, 0, 250);
-  delay(1000);
-
 }
 
-void interrupt1()
-{
-   g_state = 1;
-}
-
+//Switch tied to station
 void interrupt2()
 {
-  g_state = 2;
+  g_motorDriver.setPWM(1, 0, 50);
+  delay(1000);
+  g_motorDriver.setPWM(1, 0, 250);
+  delay(1000);
+  
+  //deploy motor
+  g_motorDriver.setPWM(2, 0, 50);
+  delay(1000);
+  g_motorDriver.setPWM(2, 0, 250);
+  delay(1000);
 }
