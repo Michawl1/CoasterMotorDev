@@ -6,47 +6,76 @@
  * @details
 *******************************************************************************/
 
+// Adafruit PWM Servo Driver Library by Adafruit v2.4.1
 #include <Adafruit_PWMServoDriver.h>
 #include <Wire.h>
 
+enum BlockZone
+{
+  BEGIN,
+  BRAKERUN,
+  STATION,
+  RIDE,
+  END
+};
+
+const unit8_t g_brakeMotorIndex = 0;
+const uint8_t g_stationGateMotorIndex = 1;
+const uint8_t g_stationChainMotorIndex = 2;
 Adafruit_PWMServoDriver g_motorDriver = Adafruit_PWMServoDriver();
-//uint8_t g_interrupt1 = 2;
-uint8_t g_interrupt2 = 3;
-uint8_t g_state = 0;
-uint8_t val = 0;
+BlockZone g_state = BlockZone::BEGIN;
 
 void setup()
 {
   g_motorDriver.begin();
   g_motorDriver.setPWMFreq(50000);
-
-  //pinMode(g_interrupt1, INPUT);
-  pinMode(g_interrupt2, INPUT);
 }
 
 void loop()
 {
-  //brakes sequence
-  val = digitalRead(g_interrupt2);
-  //if(val != LOW)
   while(true)
   {
-    delay(4000);
-    g_motorDriver.setPWM(0, 0, 68);
-    delay(4000);
-    g_motorDriver.setPWM(0, 0, 94);
-  
-    delay(2000);
-    g_motorDriver.setPWM(1, 0, 90);
-    delay(2000);
-    g_motorDriver.setPWM(1, 0, 220);
+    switch(g_state)
+    {
+      case BlockZone::BEGIN:
+      {
+        g_motorDriver.setPWM(
+          g_brakeMotorIndex, 
+          0, 
+          10);
+        delay(
+          1000);
+        g_motorDriver.setPWM(
+          g_brakeMotorIndex, 
+          0, 
+          40);
+        g_state = BlockZone::BRAKERUN;
+      }
+      break;
 
-    delay(2000);
-    g_motorDriver.setPWM(2, 0, 50);
-    delay(5000);
-    g_motorDriver.setPWM(2, 0, 92);
+      case BlockZone::BRAKERUN:
+      {
+        g_state = BlockZone::STATION;
+      }
+      break;
 
-    delay(32000);
+      case BlockZone::STATION:
+      {
+        g_state = BlockZone::RIDE;
+      }
+      break;
+
+      case BlockZone::RIDE:
+      {
+        delay(15000)
+        g_state = BlockZone::BRAKERUN;
+      }
+      break;
+
+      case BlockZone::END:
+      {
+      }
+      break;
+    }
   }
-  
 }
