@@ -19,7 +19,7 @@ enum BlockZone
   END
 };
 
-const unit8_t g_brakeMotorIndex = 0;
+const uint8_t g_brakeMotorIndex = 0;
 const uint8_t g_stationGateMotorIndex = 1;
 const uint8_t g_stationChainMotorIndex = 2;
 Adafruit_PWMServoDriver g_motorDriver = Adafruit_PWMServoDriver();
@@ -49,6 +49,8 @@ void loop()
           g_brakeMotorIndex, 
           0, 
           40);
+        delay(
+          1000);
         g_state = BlockZone::BRAKERUN;
       }
       break;
@@ -67,7 +69,7 @@ void loop()
 
       case BlockZone::RIDE:
       {
-        delay(15000)
+        delay(15);
         g_state = BlockZone::BRAKERUN;
       }
       break;
