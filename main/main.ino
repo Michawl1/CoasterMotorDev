@@ -45,19 +45,25 @@ void loop()
       break;
 
       case BlockZone::BRAKERUN:
-      {        
+      {      
+        int brakesUp = 358;
+        int brakesDown = 335;
+        // brakes down
+        for(int i = brakesUp; i > brakesDown; i--)
+        {
+          g_motorDriver.setPWM(
+            g_brakeMotorIndex, 
+            0, 
+            i);
+          delay(
+            150);
+        }
+        delay(1000);
+        // brakes up
         g_motorDriver.setPWM(
           g_brakeMotorIndex, 
           0, 
-          200);
-        delay(
-          1000);
-        g_motorDriver.setPWM(
-          g_brakeMotorIndex, 
-          0, 
-          400);
-        delay(
-          1000);
+          brakesUp);
         g_state = BlockZone::STATION;
       }
       break;
@@ -70,7 +76,7 @@ void loop()
 
       case BlockZone::RIDE:
       {
-        //delay(15);
+        delay(25000);
         g_state = BlockZone::BRAKERUN;
       }
       break;
