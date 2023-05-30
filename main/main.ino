@@ -28,7 +28,8 @@ BlockZone g_state = BlockZone::BEGIN;
 void setup()
 {
   g_motorDriver.begin();
-  g_motorDriver.setPWMFreq(50000);
+  g_motorDriver.setOscillatorFrequency(25000000);
+  g_motorDriver.setPWMFreq(50);
 }
 
 void loop()
@@ -39,24 +40,24 @@ void loop()
     {
       case BlockZone::BEGIN:
       {
-        g_motorDriver.setPWM(
-          g_brakeMotorIndex, 
-          0, 
-          10);
-        delay(
-          1000);
-        g_motorDriver.setPWM(
-          g_brakeMotorIndex, 
-          0, 
-          40);
-        delay(
-          1000);
         g_state = BlockZone::BRAKERUN;
       }
       break;
 
       case BlockZone::BRAKERUN:
-      {
+      {        
+        g_motorDriver.setPWM(
+          g_brakeMotorIndex, 
+          0, 
+          200);
+        delay(
+          1000);
+        g_motorDriver.setPWM(
+          g_brakeMotorIndex, 
+          0, 
+          400);
+        delay(
+          1000);
         g_state = BlockZone::STATION;
       }
       break;
@@ -69,7 +70,7 @@ void loop()
 
       case BlockZone::RIDE:
       {
-        delay(15);
+        //delay(15);
         g_state = BlockZone::BRAKERUN;
       }
       break;
