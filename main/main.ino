@@ -46,7 +46,7 @@ void loop()
 
       case BlockZone::BRAKERUN:
       {      
-        int brakesUp = 358;
+        int brakesUp = 359;
         int brakesDown = 335;
         // brakes down
         for(int i = brakesUp; i > brakesDown; i--)
@@ -70,13 +70,27 @@ void loop()
 
       case BlockZone::STATION:
       {
+        // Gates open
+        g_motorDriver.setPWM(
+          g_stationGateMotorIndex,
+          0,
+          347);
+          
+        delay(4000);
+
+        // Gates closed
+        g_motorDriver.setPWM(
+          g_stationGateMotorIndex,
+          0,
+          90);
+
         g_state = BlockZone::RIDE;
       }
       break;
 
       case BlockZone::RIDE:
       {
-        delay(25000);
+        delay(25);
         g_state = BlockZone::BRAKERUN;
       }
       break;
