@@ -34,8 +34,11 @@ void setup()
 
 void loop()
 {
+  int brakesDown = 335;
+  int brakesUp = 361;
+
   while(true)
-  {
+  {      
     switch(g_state)
     {
       case BlockZone::BEGIN:
@@ -43,13 +46,11 @@ void loop()
         g_state = BlockZone::BRAKERUN;
       }
       break;
-
+     
       case BlockZone::BRAKERUN:
       {      
-        int brakesUp = 359;
-        int brakesDown = 335;
         // brakes down
-        for(int i = brakesUp; i > brakesDown; i--)
+        for(int i = brakesUp; i > brakesDown; i-=2)
         {
           g_motorDriver.setPWM(
             g_brakeMotorIndex, 
@@ -58,24 +59,38 @@ void loop()
           delay(
             150);
         }
-        delay(1000);
-        // brakes up
-        g_motorDriver.setPWM(
-          g_brakeMotorIndex, 
-          0, 
-          brakesUp);
         g_state = BlockZone::STATION;
       }
       break;
 
       case BlockZone::STATION:
       {
+        // Chain on
+        g_motorDriver.setPWM(
+          g_stationChainMotorIndex,
+          0,
+          200);
+        delay(500);
+        
+        // brakes up
+        g_motorDriver.setPWM(
+          g_brakeMotorIndex, 
+          0, 
+          brakesUp);
+        delay(2300);
+
+        // Chain off
+        g_motorDriver.setPWM(
+          g_stationChainMotorIndex,
+          0,
+          310);
+        delay(1800);
+
         // Gates open
         g_motorDriver.setPWM(
           g_stationGateMotorIndex,
           0,
-          347);
-          
+          347);          
         delay(4000);
 
         // Gates closed
@@ -83,20 +98,29 @@ void loop()
           g_stationGateMotorIndex,
           0,
           90);
+        delay(1000);
 
+        // Chain on
+        g_motorDriver.setPWM(
+          g_stationChainMotorIndex,
+          0,
+          200);
+        delay(3000);
+
+        // Chain off
+        g_motorDriver.setPWM(
+          g_stationChainMotorIndex,
+          0,
+          310);
+          
         g_state = BlockZone::RIDE;
       }
-      break;
-
+      
       case BlockZone::RIDE:
       {
-        delay(25);
-        g_state = BlockZone::BRAKERUN;
-      }
-      break;
+        delay(6500);
 
-      case BlockZone::END:
-      {
+        g_state = BlockZone::BRAKERUN;
       }
       break;
     }
