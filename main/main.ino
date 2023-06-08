@@ -34,8 +34,14 @@ void setup()
 
 void loop()
 {
-  int brakesDown = 335;
-  int brakesUp = 361;
+  int brakesDown = 333;
+  int brakesUp = 363;
+
+  int chainOn = 200;
+  int chainOff = 308;
+
+  int gatesOpen = 347;
+  int gatesClosed = 90;
 
   while(true)
   {      
@@ -59,6 +65,7 @@ void loop()
           delay(
             150);
         }
+        
         g_state = BlockZone::STATION;
       }
       break;
@@ -69,56 +76,56 @@ void loop()
         g_motorDriver.setPWM(
           g_stationChainMotorIndex,
           0,
-          200);
-        delay(500);
+          chainOn);
+        delay(1000);
         
         // brakes up
         g_motorDriver.setPWM(
           g_brakeMotorIndex, 
           0, 
           brakesUp);
-        delay(2300);
+        delay(1000);
 
         // Chain off
         g_motorDriver.setPWM(
           g_stationChainMotorIndex,
           0,
-          310);
+          chainOff);
         delay(1800);
 
         // Gates open
         g_motorDriver.setPWM(
           g_stationGateMotorIndex,
           0,
-          347);          
-        delay(4000);
+          gatesOpen);          
+        delay(3500);
 
         // Gates closed
         g_motorDriver.setPWM(
           g_stationGateMotorIndex,
           0,
-          90);
+          gatesClosed);
         delay(1000);
 
         // Chain on
         g_motorDriver.setPWM(
           g_stationChainMotorIndex,
           0,
-          200);
+          chainOn);
         delay(3000);
 
         // Chain off
         g_motorDriver.setPWM(
           g_stationChainMotorIndex,
           0,
-          310);
+          chainOff);
           
         g_state = BlockZone::RIDE;
       }
       
       case BlockZone::RIDE:
       {
-        delay(6500);
+        delay(5500);
 
         g_state = BlockZone::BRAKERUN;
       }
